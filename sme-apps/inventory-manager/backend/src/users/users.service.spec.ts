@@ -41,4 +41,30 @@ describe('UsersService', () => {
     mockPrisma.user.findUnique.mockResolvedValue(null);
     await expect(service.remove('missing')).rejects.toThrow(NotFoundException);
   });
+
+  it('create calls prisma.user.create with correct data', async () => {
+    const dto = { auth0Id: 'auth0|123', email: 'a@b.com', name: 'Alice', role: Role.STAFF };
+    mockPrisma.user.create.mockResolvedValue({ id: 'u1', ...dto });
+    const result = await service.create(dto);
+    expect(mockPrisma.user.create).toHaveBeenCalledWith({
+      data: { auth0Id: 'auth0|123', email: 'a@b.com', name: 'Alice', role: Role.STAFF },
+    });
+    expect(result).toMatchObject(dto);
+  });
+
+  it('update calls prisma.user.update when user exists', async () => {
+    const user = { id: 'u1', auth0Id: 'auth0|123', email: 'a@b.com', name: 'Alice', role: Role.STAFF };
+    mockPrisma.user.findUnique.mockResolvedValue(user);
+    mockPrisma.user.update.mockResolvedValue({ ...user, name: 'Alice B' });
+    await service.update('u1', { name: 'Alice B' });
+    expect(mockPrisma.user.update).toHaveBeenCalledWith({
+      where: { id: 'u1' },
+      data: { name: 'Alice B' },
+    });
+  });
+
+  it('update throws NotFoundException when user not found', async () => {
+    mockPrisma.user.findUnique.mockResolvedValue(null);
+    await expect(service.update('missing', { name: 'X' })).rejects.toThrow(NotFoundException);
+  });
 });

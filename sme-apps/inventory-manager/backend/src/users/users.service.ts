@@ -18,7 +18,8 @@ export class UsersService {
   }
 
   create(dto: CreateUserDto) {
-    return this.prisma.user.create({ data: dto });
+    const { auth0Id, email, name, role } = dto;
+    return this.prisma.user.create({ data: { auth0Id, email, name, role } });
   }
 
   async update(id: string, dto: UpdateUserDto) {

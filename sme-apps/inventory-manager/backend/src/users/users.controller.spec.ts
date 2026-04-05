@@ -28,4 +28,19 @@ describe('UsersController', () => {
     await controller.update('u1', { role: Role.MANAGER });
     expect(mockService.update).toHaveBeenCalledWith('u1', { role: Role.MANAGER });
   });
+
+  it('create delegates to service', async () => {
+    const dto = { auth0Id: 'auth0|123', email: 'a@b.com', name: 'Alice', role: Role.STAFF };
+    mockService.create.mockResolvedValue({ id: 'u1', ...dto });
+    const result = await controller.create(dto);
+    expect(mockService.create).toHaveBeenCalledWith(dto);
+    expect(result).toMatchObject(dto);
+  });
+
+  it('remove delegates to service', async () => {
+    mockService.remove.mockResolvedValue({ id: 'u1' });
+    const result = await controller.remove('u1');
+    expect(mockService.remove).toHaveBeenCalledWith('u1');
+    expect(result).toMatchObject({ id: 'u1' });
+  });
 });

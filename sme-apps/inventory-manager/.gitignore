@@ -1,2 +1,6 @@
 .worktrees/
 .superpowers/
+
+# Local env files (contain real credentials)
+.env
+.env.dev

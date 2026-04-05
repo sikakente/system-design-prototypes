@@ -2,7 +2,7 @@ import { makeStyles, tokens, Card, Subtitle2, Body1, Text } from '@fluentui/reac
 import type { Product } from '../../hooks/useProducts';
 
 const useStyles = makeStyles({
-  card: { padding: tokens.spacingVerticalM, borderColor: tokens.colorStatusDangerBorder1 },
+  card: { padding: tokens.spacingVerticalM },
   title: { color: tokens.colorStatusDangerForeground1 },
   list: { listStyle: 'none', padding: 0, margin: `${tokens.spacingVerticalS} 0 0`, display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalXS },
 });
@@ -14,7 +14,7 @@ interface LowStockPanelProps {
 export function LowStockPanel({ alerts }: LowStockPanelProps) {
   const styles = useStyles();
   return (
-    <Card className={styles.card}>
+    <Card className={styles.card} style={{ borderColor: tokens.colorStatusDangerBorder1 }}>
       <Subtitle2 className={styles.title}>⚠ Low Stock ({alerts.length})</Subtitle2>
       {alerts.length === 0 ? (
         <Body1>All stock levels healthy</Body1>

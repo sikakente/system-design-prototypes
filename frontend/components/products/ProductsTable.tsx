@@ -59,21 +59,14 @@ export function ProductsTable({ products, onEdit, onDelete }: ProductsTableProps
   return (
     <DataGrid items={products} columns={columns} getRowId={(p) => p.id} className={styles.table}>
       <DataGridHeader>
-        <DataGridRow>
-          {columns.map((col) => (
-            <DataGridHeaderCell key={col.columnId}>{col.renderHeaderCell()}</DataGridHeaderCell>
-          ))}
-        </DataGridRow>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <DataGridRow>{columns.map((col) => <DataGridHeaderCell key={col.columnId}>{col.renderHeaderCell()}</DataGridHeaderCell>) as any}</DataGridRow>
       </DataGridHeader>
-      <DataGridBody<Product>>
-        {products.map((item) => (
-          <DataGridRow<Product> key={item.id}>
-            {columns.map((col) => (
-              <DataGridCell key={col.columnId}>{col.renderCell(item)}</DataGridCell>
-            ))}
-          </DataGridRow>
-        ))}
-      </DataGridBody>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <DataGridBody<Product>>{products.map((item) => (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          <DataGridRow<Product> key={item.id}>{columns.map((col) => <DataGridCell key={col.columnId}>{col.renderCell(item)}</DataGridCell>) as any}</DataGridRow>
+        )) as any}</DataGridBody>
     </DataGrid>
   );
 }

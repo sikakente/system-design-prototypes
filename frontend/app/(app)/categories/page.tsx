@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, tokens, Button, Spinner, MessageBar, MessageBarBody, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
+import { tokens, Button, Spinner, MessageBar, MessageBarBody, MessageBarActions, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
 import { Add20Regular } from '@fluentui/react-icons';
 import { Header } from '../../../components/shell/Header';
 import { CategoriesGrid } from '../../../components/categories/CategoriesGrid';
@@ -57,7 +57,7 @@ export default function CategoriesPage() {
         }
       />
       <div style={{ padding: tokens.spacingVerticalL }}>
-        {opError && <MessageBar intent="error" onDismiss={() => setOpError('')}><MessageBarBody>{opError}</MessageBarBody></MessageBar>}
+        {opError && <MessageBar intent="error"><MessageBarBody>{opError}</MessageBarBody><MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} /></MessageBar>}
         {(categories ?? []).length === 0 ? (
           <EmptyState title="No categories yet" description="Organise your products by adding categories." action={{ label: 'Add Category', onClick: () => setDialogOpen(true) }} />
         ) : (

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, tokens, Button, Input, Spinner, MessageBar, MessageBarBody } from '@fluentui/react-components';
+import { makeStyles, tokens, Button, Input, Spinner, MessageBar, MessageBarBody, MessageBarActions } from '@fluentui/react-components';
 import { Add20Regular } from '@fluentui/react-icons';
 import { Header } from '../../../components/shell/Header';
 import { ProductsTable } from '../../../components/products/ProductsTable';
@@ -72,7 +72,7 @@ export default function ProductsPage() {
         }
       />
       <div className={styles.content}>
-        {opError && <MessageBar intent="error" onDismiss={() => setOpError('')}><MessageBarBody>{opError}</MessageBarBody></MessageBar>}
+        {opError && <MessageBar intent="error"><MessageBarBody>{opError}</MessageBarBody><MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} /></MessageBar>}
         <div className={styles.toolbar}>
           <Input placeholder="Search by name or SKU..." value={search} onChange={(_, d) => setSearch(d.value)} style={{ maxWidth: 320 }} />
         </div>

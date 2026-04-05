@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react-components';
 
 interface ConfirmDialogProps {
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
   title: string;
   description: string;
   confirmLabel?: string;

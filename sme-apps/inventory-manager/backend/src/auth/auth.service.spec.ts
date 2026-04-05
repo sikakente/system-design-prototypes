@@ -38,7 +38,7 @@ describe('AuthService', () => {
 
     expect(mockPrisma.user.upsert).toHaveBeenCalledWith({
       where: { auth0Id: 'auth0|abc' },
-      update: { email: 'a@b.com', name: 'Alice', role: Role.STAFF },
+      update: { email: 'a@b.com', name: 'Alice' },
       create: { auth0Id: 'auth0|abc', email: 'a@b.com', name: 'Alice', role: Role.STAFF },
     });
     expect(result).toEqual(user);

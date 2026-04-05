@@ -9,7 +9,7 @@ export class AuthService {
   upsertUser(auth0Id: string, email: string, name: string, role: Role) {
     return this.prisma.user.upsert({
       where: { auth0Id },
-      update: { email, name, role },
+      update: { email, name },
       create: { auth0Id, email, name, role },
     });
   }

@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
+import { PrismaService } from '../prisma/prisma.service';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class Auth0Strategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private prisma: PrismaService) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
@@ -20,14 +22,17 @@ export class Auth0Strategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: Record<string, unknown>) {
+  async validate(payload: any) {
+    const auth0Id = payload.sub;
+    const claimRole = (payload['https://inventory/role'] as Role) ?? Role.STAFF;
+
+    const dbUser = await this.prisma.user.findUnique({ where: { auth0Id } });
+
     return {
-      sub: payload.sub as string,
-      email: (payload['https://inventory/email'] ?? payload.email) as string,
-      name: (payload['https://inventory/name'] ?? payload.name) as string,
-      role: (
-        (payload['https://inventory/role'] as string | undefined)?.toUpperCase() ?? 'STAFF'
-      ) as string,
+      auth0Id,
+      email: payload['https://inventory/email'] ?? payload.email,
+      name: payload['https://inventory/name'] ?? payload.name,
+      role: dbUser?.role ?? claimRole,  // DB role wins; falls back to JWT claim
     };
   }
 }

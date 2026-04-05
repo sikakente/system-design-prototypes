@@ -59,14 +59,21 @@ export function ProductsTable({ products, onEdit, onDelete }: ProductsTableProps
   return (
     <DataGrid items={products} columns={columns} getRowId={(p) => p.id} className={styles.table}>
       <DataGridHeader>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <DataGridRow>{columns.map((col) => <DataGridHeaderCell key={col.columnId}>{col.renderHeaderCell()}</DataGridHeaderCell>) as any}</DataGridRow>
+        <DataGridRow>
+          {({ renderHeaderCell }: { renderHeaderCell: () => React.ReactNode }) => (
+            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+          )}
+        </DataGridRow>
       </DataGridHeader>
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <DataGridBody<Product>>{products.map((item) => (
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          <DataGridRow<Product> key={item.id}>{columns.map((col) => <DataGridCell key={col.columnId}>{col.renderCell(item)}</DataGridCell>) as any}</DataGridRow>
-        )) as any}</DataGridBody>
+      <DataGridBody<Product>>
+        {({ item, rowId }: { item: Product; rowId: string }) => (
+          <DataGridRow<Product> key={rowId}>
+            {({ renderCell }: { renderCell: (item: Product) => React.ReactNode }) => (
+              <DataGridCell>{renderCell(item)}</DataGridCell>
+            )}
+          </DataGridRow>
+        )}
+      </DataGridBody>
     </DataGrid>
   );
 }

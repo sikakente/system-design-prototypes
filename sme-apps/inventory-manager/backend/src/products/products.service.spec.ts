@@ -96,4 +96,23 @@ describe('ProductsService', () => {
       await expect(service.remove('missing')).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('create', () => {
+    it('calls prisma.product.create with dto', async () => {
+      mockPrisma.product.create.mockResolvedValue(product);
+      const dto = {
+        name: 'Widget',
+        sku: 'WGT-001',
+        quantity: 10,
+        reorderThreshold: 5,
+        unit: 'pcs',
+        categoryId: 'cat1',
+      };
+      const result = await service.create(dto);
+      expect(mockPrisma.product.create).toHaveBeenCalledWith(
+        expect.objectContaining({ data: dto }),
+      );
+      expect(result).toEqual(product);
+    });
+  });
 });

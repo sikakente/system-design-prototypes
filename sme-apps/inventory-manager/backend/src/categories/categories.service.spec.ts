@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { CategoriesService } from './categories.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, ConflictException } from '@nestjs/common';
 
 const mockPrisma = {
   category: {
@@ -46,5 +46,33 @@ describe('CategoriesService', () => {
   it('remove throws NotFoundException when not found', async () => {
     mockPrisma.category.findUnique.mockResolvedValue(null);
     await expect(service.remove('missing')).rejects.toThrow(NotFoundException);
+  });
+
+  it('findOne returns category when found', async () => {
+    mockPrisma.category.findUnique.mockResolvedValue(category);
+    const result = await service.findOne('cat1');
+    expect(result).toEqual(category);
+  });
+
+  it('create persists and returns the category', async () => {
+    mockPrisma.category.create.mockResolvedValue(category);
+    const result = await service.create({ name: 'Electronics' });
+    expect(mockPrisma.category.create).toHaveBeenCalledWith({ data: { name: 'Electronics' } });
+    expect(result).toEqual(category);
+  });
+
+  it('create throws ConflictException on duplicate name', async () => {
+    mockPrisma.category.create.mockRejectedValue({ code: 'P2002' });
+    await expect(service.create({ name: 'Electronics' })).rejects.toThrow(ConflictException);
+  });
+
+  it('update throws NotFoundException when not found', async () => {
+    mockPrisma.category.findUnique.mockResolvedValue(null);
+    await expect(service.update('missing', { name: 'X' })).rejects.toThrow(NotFoundException);
+  });
+
+  it('remove throws ConflictException when category has products', async () => {
+    mockPrisma.category.findUnique.mockResolvedValue({ ...category, _count: { products: 2 } });
+    await expect(service.remove('cat1')).rejects.toThrow(ConflictException);
   });
 });

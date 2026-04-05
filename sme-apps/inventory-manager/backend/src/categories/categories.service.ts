@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -23,17 +23,30 @@ export class CategoriesService {
     return category;
   }
 
-  create(dto: CreateCategoryDto) {
-    return this.prisma.category.create({ data: dto });
+  async create(dto: CreateCategoryDto) {
+    try {
+      return await this.prisma.category.create({ data: dto });
+    } catch (e: any) {
+      if (e?.code === 'P2002') throw new ConflictException('Category name already exists');
+      throw e;
+    }
   }
 
   async update(id: string, dto: UpdateCategoryDto) {
     await this.findOne(id);
-    return this.prisma.category.update({ where: { id }, data: dto });
+    try {
+      return await this.prisma.category.update({ where: { id }, data: dto });
+    } catch (e: any) {
+      if (e?.code === 'P2002') throw new ConflictException('Category name already exists');
+      throw e;
+    }
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    const category = await this.findOne(id);
+    if ((category as any)._count?.products > 0) {
+      throw new ConflictException('Cannot delete category with existing products');
+    }
     return this.prisma.category.delete({ where: { id } });
   }
 }

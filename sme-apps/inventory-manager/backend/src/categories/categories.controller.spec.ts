@@ -35,4 +35,19 @@ describe('CategoriesController', () => {
     expect(mockService.create).toHaveBeenCalledWith(dto);
     expect(result).toMatchObject(dto);
   });
+
+  it('update delegates to service', async () => {
+    const dto = { name: 'Updated' };
+    mockService.update.mockResolvedValue({ id: 'cat1', ...dto });
+    const result = await controller.update('cat1', dto);
+    expect(mockService.update).toHaveBeenCalledWith('cat1', dto);
+    expect(result).toMatchObject(dto);
+  });
+
+  it('remove delegates to service', async () => {
+    mockService.remove.mockResolvedValue({ id: 'cat1', name: 'Electronics' });
+    const result = await controller.remove('cat1');
+    expect(mockService.remove).toHaveBeenCalledWith('cat1');
+    expect(result).toMatchObject({ id: 'cat1' });
+  });
 });

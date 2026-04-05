@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { ProductsService } from './products.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { Role } from '@prisma/client';
 
 const mockPrisma = {
@@ -84,9 +84,16 @@ describe('ProductsService', () => {
       mockPrisma.product.findUnique.mockResolvedValue(product);
       mockPrisma.product.update.mockResolvedValue({ ...product, quantity: 8 });
       await service.update('p1', { name: 'Renamed', quantity: 8 }, Role.STAFF);
-      expect(mockPrisma.product.update).toHaveBeenCalledWith(
-        expect.objectContaining({ data: { quantity: 8 } }),
-      );
+      expect(mockPrisma.product.update).toHaveBeenCalledWith({
+        where: { id: 'p1' },
+        data: { quantity: 8 },
+        include: { category: true },
+      });
+    });
+
+    it('throws BadRequestException when STAFF sends no quantity', async () => {
+      mockPrisma.product.findUnique.mockResolvedValue(product);
+      await expect(service.update('p1', {}, Role.STAFF)).rejects.toThrow(BadRequestException);
     });
   });
 

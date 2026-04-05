@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -38,7 +38,15 @@ export class ProductsService {
 
   async update(id: string, dto: UpdateProductDto, userRole: Role) {
     await this.findOne(id);
-    const data = userRole === Role.STAFF ? { quantity: dto.quantity } : dto;
+    let data: Partial<UpdateProductDto>;
+    if (userRole === Role.STAFF) {
+      if (dto.quantity === undefined) {
+        throw new BadRequestException('STAFF must provide quantity');
+      }
+      data = { quantity: dto.quantity };
+    } else {
+      data = dto;
+    }
     return this.prisma.product.update({ where: { id }, data, include: { category: true } });
   }
 

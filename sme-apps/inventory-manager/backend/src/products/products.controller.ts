@@ -30,6 +30,7 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.MANAGER, Role.STAFF)
   update(
     @Param('id') id: string,
     @Body() dto: UpdateProductDto,

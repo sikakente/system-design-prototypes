@@ -10,7 +10,6 @@ import {
   Field,
   Input,
   Select,
-  Option,
   Button,
   Spinner,
 } from '@fluentui/react-components';
@@ -73,8 +72,8 @@ export function ProductForm({ open, product, categories, onSubmit, onClose }: Pr
           <label>Unit (optional)<Input name="unit" value={form.unit} onChange={handleChange} placeholder="pcs, kg, boxes..." /></label>
           <label>Category
             <Select name="categoryId" value={form.categoryId} onChange={handleChange}>
-              <Option value="">Select category...</Option>
-              {categories.map((c) => <Option key={c.id} value={c.id}>{c.name}</Option>)}
+              <option value="">Select category...</option>
+              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </Select>
           </label>
         </div>

@@ -87,7 +87,7 @@ components/
 ├── dashboard/
 │   ├── StatCard.tsx             # Metric tile
 │   ├── StatCard.test.tsx
-│   ├── ActivityFeed.tsx         # Recent changes list
+│   ├── ActivityFeed.tsx         # Recent changes list (derived from updatedAt on products — no separate audit log)
 │   └── LowStockPanel.tsx        # Quick-view alerts widget
 ├── alerts/
 │   ├── AlertsTable.tsx
@@ -243,7 +243,7 @@ GET    /auth/me                  # Upsert user from Auth0 token, return profile
 GET    /products                 # List all (?search=, ?categoryId=, ?lowStock=true)
 POST   /products                 # Create — MANAGER, ADMIN
 GET    /products/:id             # Get single product
-PATCH  /products/:id             # Update — MANAGER/ADMIN full, STAFF quantity only
+PATCH  /products/:id             # Update — MANAGER/ADMIN full edit; STAFF may only update `quantity` field (other fields rejected with 403)
 DELETE /products/:id             # Delete — MANAGER, ADMIN
 
 GET    /categories               # List all with product count

@@ -1,4 +1,4 @@
-import { Badge } from '@fluentui/react-components';
+import { Tag } from 'antd';
 
 interface StockBadgeProps {
   quantity: number;
@@ -6,11 +6,6 @@ interface StockBadgeProps {
 }
 
 export function StockBadge({ quantity, threshold }: StockBadgeProps) {
-  const color =
-    quantity === 0 ? 'danger' : quantity <= threshold ? 'warning' : 'success';
-  return (
-    <Badge color={color} appearance="filled">
-      {quantity}
-    </Badge>
-  );
+  const color = quantity === 0 ? 'error' : quantity <= threshold ? 'warning' : 'success';
+  return <Tag color={color}>{quantity}</Tag>;
 }

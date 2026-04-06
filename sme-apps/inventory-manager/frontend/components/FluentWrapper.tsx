@@ -1,6 +1,6 @@
 'use client';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
+import { ConfigProvider } from 'antd';
 
 export function FluentWrapper({ children }: { children: React.ReactNode }) {
-  return <FluentProvider theme={webLightTheme}>{children}</FluentProvider>;
+  return <ConfigProvider>{children}</ConfigProvider>;
 }

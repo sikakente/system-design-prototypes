@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, Button, Input, Spinner, MessageBar, MessageBarBody, MessageBarActions, tokens } from '@fluentui/react-components';
-import { Add20Regular } from '@fluentui/react-icons';
+import { Button, Input, Spin, Alert } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { ProductsTable } from '../../../components/products/ProductsTable';
 import { ProductForm } from '../../../components/products/ProductForm';
 import { EmptyState } from '../../../components/shared/EmptyState';
@@ -10,18 +10,7 @@ import { useProducts, createProduct, updateProduct, deleteProduct, type Product 
 import { useCategories } from '../../../hooks/useCategories';
 import { mutate } from 'swr';
 
-const useStyles = makeStyles({
-  content: {
-    padding: '28px 32px',
-    backgroundColor: tokens.colorNeutralBackground2,
-    minHeight: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-});
-
 export default function ProductsPage() {
-  const styles = useStyles();
   const { data: products, isLoading, error } = useProducts();
   const { data: categories } = useCategories();
   const [search, setSearch] = useState('');
@@ -59,25 +48,33 @@ export default function ProductsPage() {
     }
   };
 
-  if (isLoading) return <Spinner label="Loading products..." />;
-  if (error) return <MessageBar intent="error"><MessageBarBody>Failed to load products</MessageBarBody></MessageBar>;
+  if (isLoading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', padding: 48 }}>
+      <Spin />
+    </div>
+  );
+  if (error) return <Alert type="error" title="Failed to load products" showIcon />;
 
   return (
-    <div className={styles.content}>
+    <div style={{ padding: '28px 32px', backgroundColor: '#f5f5f5', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
       {opError && (
-        <MessageBar intent="error">
-          <MessageBarBody>{opError}</MessageBarBody>
-          <MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} />
-        </MessageBar>
+        <Alert
+          type="error"
+          message={opError}
+          showIcon
+          closable
+          onClose={() => setOpError('')}
+          style={{ marginBottom: 16 }}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <Input
           placeholder="Search by name or SKU..."
           value={search}
-          onChange={(_, d) => setSearch(d.value)}
+          onChange={(e) => setSearch(e.target.value)}
           style={{ maxWidth: 280 }}
         />
-        <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
           Add Product
         </Button>
       </div>

@@ -1,20 +1,11 @@
 'use client';
-import { makeStyles, tokens, Spinner, MessageBar, MessageBarBody } from '@fluentui/react-components';
+import { Spin, Alert } from 'antd';
 import { AlertsTable } from '../../../components/alerts/AlertsTable';
 import { EmptyState } from '../../../components/shared/EmptyState';
 import { useAlerts, updateThreshold } from '../../../hooks/useAlerts';
 import { mutate } from 'swr';
 
-const useStyles = makeStyles({
-  page: {
-    padding: '28px 32px',
-    backgroundColor: tokens.colorNeutralBackground2,
-    minHeight: '100%',
-  },
-});
-
 export default function AlertsPage() {
-  const styles = useStyles();
   const { data: alerts, isLoading, error } = useAlerts();
 
   const handleUpdateThreshold = async (productId: string, threshold: number) => {
@@ -22,11 +13,15 @@ export default function AlertsPage() {
     mutate('/alerts');
   };
 
-  if (isLoading) return <Spinner label="Loading alerts..." />;
-  if (error) return <MessageBar intent="error"><MessageBarBody>Failed to load alerts</MessageBarBody></MessageBar>;
+  if (isLoading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%', padding: '28px 32px' }}>
+      <Spin />
+    </div>
+  );
+  if (error) return <Alert type="error" title="Failed to load alerts" showIcon />;
 
   return (
-    <div className={styles.page}>
+    <div style={{ padding: '28px 32px', background: '#f5f5f5', minHeight: '100%' }}>
       {(alerts ?? []).length === 0 ? (
         <EmptyState title="No reorder alerts" description="All stock levels are above their thresholds." />
       ) : (

@@ -1,6 +1,6 @@
 'use client';
 import { makeStyles, Avatar } from '@fluentui/react-components';
-import { Search20Regular, AlertBadge20Regular } from '@fluentui/react-icons';
+import { SearchOutlined, BellOutlined } from '@ant-design/icons';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -150,11 +150,11 @@ export function GlobalHeader() {
 
       <div className={styles.rightSection}>
         <div className={styles.searchBar}>
-          <Search20Regular />
+          <SearchOutlined />
           <span>Search...</span>
         </div>
         <div className={styles.notificationBtn}>
-          <AlertBadge20Regular />
+          <BellOutlined />
         </div>
       </div>
     </header>

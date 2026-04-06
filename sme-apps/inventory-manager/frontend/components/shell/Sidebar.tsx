@@ -4,6 +4,17 @@ import {
   tokens,
   Text,
   Body1,
+  Body1Strong,
+  Caption1,
+  Avatar,
+  Menu,
+  MenuTrigger,
+  MenuPopover,
+  MenuList,
+  MenuGroup,
+  MenuGroupHeader,
+  MenuDivider,
+  MenuItem,
 } from '@fluentui/react-components';
 import {
   Home20Regular,
@@ -11,6 +22,7 @@ import {
   Tag20Regular,
   Alert20Regular,
   People20Regular,
+  SignOut20Regular,
 } from '@fluentui/react-icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -52,8 +64,19 @@ const useStyles = makeStyles({
     color: tokens.colorBrandForeground1,
   },
   footer: {
+    marginTop: 'auto',
     padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalM}`,
     borderTop: `1px solid ${tokens.colorNeutralStroke1}`,
+  },
+  menuHeader: {
+    padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalM}`,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalXXS,
+    minWidth: '160px',
+  },
+  menuRole: {
+    color: tokens.colorNeutralForeground3,
   },
 });
 
@@ -95,11 +118,30 @@ export function Sidebar() {
           </Link>
         </RoleGuard>
       </nav>
-      <div className={styles.footer}>
-        <Body1>{user?.name ?? 'User'}</Body1>
-        <br />
-        <Text size={200}>{role}</Text>
-      </div>
+      <Menu>
+        <MenuTrigger>
+          <Avatar
+            name={user?.name ?? 'User'}
+            size={36}
+            aria-label={user?.name ?? 'User'}
+            className={styles.footer}
+          />
+        </MenuTrigger>
+        <MenuPopover>
+          <MenuList>
+            <MenuGroup>
+              <MenuGroupHeader className={styles.menuHeader}>
+                <Body1Strong>{user?.name ?? 'User'}</Body1Strong>
+                <Caption1 className={styles.menuRole}>{role}</Caption1>
+              </MenuGroupHeader>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuItem icon={<SignOut20Regular />}>
+              <a href="/auth/logout">Sign out</a>
+            </MenuItem>
+          </MenuList>
+        </MenuPopover>
+      </Menu>
     </aside>
   );
 }

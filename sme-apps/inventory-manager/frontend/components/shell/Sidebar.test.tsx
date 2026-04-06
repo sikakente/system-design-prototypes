@@ -21,6 +21,19 @@ vi.mock('@fluentui/react-components', () => ({
   tokens: {},
   Text: ({ children }: any) => <span>{children}</span>,
   Body1: ({ children }: any) => <span>{children}</span>,
+  Body1Strong: ({ children }: any) => <span>{children}</span>,
+  Caption1: ({ children }: any) => <span>{children}</span>,
+  Avatar: ({ name, 'aria-label': ariaLabel }: any) => (
+    <button aria-label={ariaLabel ?? name}>{name}</button>
+  ),
+  Menu: ({ children }: any) => <div>{children}</div>,
+  MenuTrigger: ({ children }: any) => <div>{children}</div>,
+  MenuPopover: ({ children }: any) => <div>{children}</div>,
+  MenuList: ({ children }: any) => <div>{children}</div>,
+  MenuDivider: () => <hr />,
+  MenuItem: ({ children, onClick }: any) => (
+    <button role="menuitem" onClick={onClick}>{children}</button>
+  ),
 }));
 
 vi.mock('@fluentui/react-icons', () => ({
@@ -29,6 +42,7 @@ vi.mock('@fluentui/react-icons', () => ({
   Tag20Regular: () => <svg />,
   Alert20Regular: () => <svg />,
   People20Regular: () => <svg />,
+  SignOut20Regular: () => <svg />,
 }));
 
 describe('Sidebar', () => {
@@ -45,13 +59,44 @@ describe('Sidebar', () => {
     expect(screen.getByText('Reorder Alerts')).toBeInTheDocument();
   });
 
-  it('shows user name in footer', () => {
+  it('renders avatar with user initials accessible label', () => {
     vi.mocked(AuthContextModule.useAuth).mockReturnValue({
-      user: { name: 'Alice' } as any,
+      user: { name: 'Alice Smith' } as any,
       role: 'STAFF',
       isLoading: false,
     });
     render(<Sidebar />);
-    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Alice Smith' })).toBeInTheDocument();
+  });
+
+  it('shows user name and role in the dropdown header', () => {
+    vi.mocked(AuthContextModule.useAuth).mockReturnValue({
+      user: { name: 'Alice Smith' } as any,
+      role: 'MANAGER',
+      isLoading: false,
+    });
+    render(<Sidebar />);
+    expect(screen.getByText('Alice Smith')).toBeInTheDocument();
+    expect(screen.getByText('MANAGER')).toBeInTheDocument();
+  });
+
+  it('renders a sign out menu item linking to /auth/logout', () => {
+    vi.mocked(AuthContextModule.useAuth).mockReturnValue({
+      user: { name: 'Alice Smith' } as any,
+      role: 'STAFF',
+      isLoading: false,
+    });
+    render(<Sidebar />);
+    expect(screen.getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
+  });
+
+  it('falls back to "User" when user is undefined', () => {
+    vi.mocked(AuthContextModule.useAuth).mockReturnValue({
+      user: undefined,
+      role: 'STAFF',
+      isLoading: true,
+    });
+    render(<Sidebar />);
+    expect(screen.getByRole('button', { name: 'User' })).toBeInTheDocument();
   });
 });

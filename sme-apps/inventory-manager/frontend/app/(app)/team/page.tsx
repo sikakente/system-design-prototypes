@@ -1,5 +1,5 @@
 'use client';
-import { makeStyles, tokens, Spinner, MessageBar, MessageBarBody } from '@fluentui/react-components';
+import { tokens, Spinner, MessageBar, MessageBarBody } from '@fluentui/react-components';
 import { redirect } from 'next/navigation';
 import { Header } from '../../../components/shell/Header';
 import { TeamTable } from '../../../components/team/TeamTable';

@@ -53,7 +53,7 @@ export default function ProductsPage() {
       <Spin />
     </div>
   );
-  if (error) return <Alert type="error" message="Failed to load products" showIcon />;
+  if (error) return <Alert type="error" title="Failed to load products" showIcon />;
 
   return (
     <div style={{ padding: '28px 32px', backgroundColor: '#f5f5f5', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>

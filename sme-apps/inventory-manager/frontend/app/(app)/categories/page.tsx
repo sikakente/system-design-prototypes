@@ -45,7 +45,7 @@ export default function CategoriesPage() {
       <Spin />
     </div>
   );
-  if (error) return <Alert type="error" message="Failed to load categories" showIcon />;
+  if (error) return <Alert type="error" title="Failed to load categories" showIcon />;
 
   return (
     <div style={{ padding: '28px 32px', background: '#f5f5f5', minHeight: '100%' }}>
@@ -87,7 +87,7 @@ export default function CategoriesPage() {
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Category name" />
           </Form.Item>
         </Form>
-        {opError && <Alert type="error" message={opError} showIcon style={{ marginTop: 8 }} />}
+        {opError && <Alert type="error" title={opError} showIcon style={{ marginTop: 8 }} />}
       </Modal>
     </div>
   );

@@ -18,7 +18,7 @@ export default function AlertsPage() {
       <Spin />
     </div>
   );
-  if (error) return <Alert type="error" message="Failed to load alerts" showIcon />;
+  if (error) return <Alert type="error" title="Failed to load alerts" showIcon />;
 
   return (
     <div style={{ padding: '28px 32px', background: '#f5f5f5', minHeight: '100%' }}>

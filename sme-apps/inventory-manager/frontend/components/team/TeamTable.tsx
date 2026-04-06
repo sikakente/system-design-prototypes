@@ -12,7 +12,6 @@ import {
   Button,
   Avatar,
   Select,
-  Option,
 } from '@fluentui/react-components';
 import { Delete20Regular } from '@fluentui/react-icons';
 import { RoleGuard } from '../shared/RoleGuard';
@@ -54,9 +53,9 @@ export function TeamTable({ members, onUpdateRole, onRemove }: TeamTableProps) {
             <TableCell>
               <RoleGuard minRole="ADMIN" fallback={<Badge color={ROLE_COLORS[m.role]}>{m.role}</Badge>}>
                 <Select value={m.role} onChange={(_, d) => onUpdateRole(m.id, d.value as Role)} style={{ width: 120 }}>
-                  <Option value="STAFF">STAFF</Option>
-                  <Option value="MANAGER">MANAGER</Option>
-                  <Option value="ADMIN">ADMIN</Option>
+                  <option value="STAFF">STAFF</option>
+                  <option value="MANAGER">MANAGER</option>
+                  <option value="ADMIN">ADMIN</option>
                 </Select>
               </RoleGuard>
             </TableCell>

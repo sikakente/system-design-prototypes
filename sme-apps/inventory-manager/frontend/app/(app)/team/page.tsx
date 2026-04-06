@@ -30,7 +30,10 @@ export default function TeamPage() {
   return (
     <>
       <Header title="Team" />
-      <div style={{ padding: tokens.spacingVerticalL }}>
+      <div style={{ padding: tokens.spacingVerticalL, display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM }}>
+        <MessageBar intent="info">
+          <MessageBarBody>Role changes take effect on the user's next login.</MessageBarBody>
+        </MessageBar>
         {(members ?? []).length === 0 ? (
           <EmptyState title="No team members" description="Invite people to join your team." />
         ) : (

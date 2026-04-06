@@ -11,6 +11,8 @@ import {
   MenuTrigger,
   MenuPopover,
   MenuList,
+  MenuGroup,
+  MenuGroupHeader,
   MenuDivider,
   MenuItem,
 } from '@fluentui/react-components';
@@ -62,9 +64,9 @@ const useStyles = makeStyles({
     color: tokens.colorBrandForeground1,
   },
   footer: {
+    marginTop: 'auto',
     padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalM}`,
     borderTop: `1px solid ${tokens.colorNeutralStroke1}`,
-    cursor: 'pointer',
   },
   menuHeader: {
     padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalM}`,
@@ -117,21 +119,22 @@ export function Sidebar() {
         </RoleGuard>
       </nav>
       <Menu>
-        <MenuTrigger disableButtonEnhancement>
-          <div className={styles.footer}>
-            <Avatar
-              name={user?.name ?? 'User'}
-              size={36}
-              aria-label={user?.name ?? 'User'}
-            />
-          </div>
+        <MenuTrigger>
+          <Avatar
+            name={user?.name ?? 'User'}
+            size={36}
+            aria-label={user?.name ?? 'User'}
+            className={styles.footer}
+          />
         </MenuTrigger>
         <MenuPopover>
           <MenuList>
-            <div className={styles.menuHeader}>
-              <Body1Strong>{user?.name ?? 'User'}</Body1Strong>
-              <Caption1 className={styles.menuRole}>{role}</Caption1>
-            </div>
+            <MenuGroup>
+              <MenuGroupHeader className={styles.menuHeader}>
+                <Body1Strong>{user?.name ?? 'User'}</Body1Strong>
+                <Caption1 className={styles.menuRole}>{role}</Caption1>
+              </MenuGroupHeader>
+            </MenuGroup>
             <MenuDivider />
             <MenuItem
               icon={<SignOut20Regular />}

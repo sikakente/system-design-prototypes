@@ -30,6 +30,8 @@ vi.mock('@fluentui/react-components', () => ({
   MenuTrigger: ({ children }: any) => <div>{children}</div>,
   MenuPopover: ({ children }: any) => <div>{children}</div>,
   MenuList: ({ children }: any) => <div>{children}</div>,
+  MenuGroup: ({ children }: any) => <div>{children}</div>,
+  MenuGroupHeader: ({ children, className }: any) => <div className={className}>{children}</div>,
   MenuDivider: () => <hr />,
   MenuItem: ({ children, onClick }: any) => (
     <button role="menuitem" onClick={onClick}>{children}</button>

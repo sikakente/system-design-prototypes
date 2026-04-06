@@ -1,19 +1,26 @@
 'use client';
-import { makeStyles, tokens, Title3 } from '@fluentui/react-components';
+import { makeStyles } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   header: {
-    height: '56px',
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
+    height: '60px',
+    backgroundColor: 'var(--p-card)',
+    borderBottom: '1px solid var(--p-border)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: `0 ${tokens.spacingHorizontalXL}`,
-    backgroundColor: tokens.colorNeutralBackground1,
+    padding: '0 28px',
+  },
+  title: {
+    fontFamily: 'var(--p-sans)',
+    fontSize: '18px',
+    fontWeight: '700',
+    color: 'var(--p-text)',
+    margin: '0',
   },
   actions: {
     display: 'flex',
-    gap: tokens.spacingHorizontalS,
+    gap: '8px',
   },
 });
 
@@ -26,7 +33,7 @@ export function Header({ title, actions }: HeaderProps) {
   const styles = useStyles();
   return (
     <header className={styles.header}>
-      <Title3>{title}</Title3>
+      <h1 className={styles.title}>{title}</h1>
       {actions && <div className={styles.actions}>{actions}</div>}
     </header>
   );

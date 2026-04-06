@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, tokens, Button, Input, Spinner, MessageBar, MessageBarBody, MessageBarActions } from '@fluentui/react-components';
+import { makeStyles, Button, Input, Spinner, MessageBar, MessageBarBody, MessageBarActions } from '@fluentui/react-components';
 import { Add20Regular } from '@fluentui/react-icons';
-import { Header } from '../../../components/shell/Header';
 import { ProductsTable } from '../../../components/products/ProductsTable';
 import { ProductForm } from '../../../components/products/ProductForm';
 import { EmptyState } from '../../../components/shared/EmptyState';
@@ -12,8 +11,13 @@ import { useCategories } from '../../../hooks/useCategories';
 import { mutate } from 'swr';
 
 const useStyles = makeStyles({
-  content: { padding: tokens.spacingVerticalL, display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM },
-  toolbar: { display: 'flex', gap: tokens.spacingHorizontalM, alignItems: 'center' },
+  content: {
+    padding: '28px 32px',
+    backgroundColor: 'var(--p-bg)',
+    minHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
 });
 
 export default function ProductsPage() {
@@ -59,30 +63,33 @@ export default function ProductsPage() {
   if (error) return <MessageBar intent="error"><MessageBarBody>Failed to load products</MessageBarBody></MessageBar>;
 
   return (
-    <>
-      <Header
-        title="Products"
-        actions={
-          <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
-            Add Product
-          </Button>
-        }
-      />
-      <div className={styles.content}>
-        {opError && <MessageBar intent="error"><MessageBarBody>{opError}</MessageBarBody><MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} /></MessageBar>}
-        <div className={styles.toolbar}>
-          <Input placeholder="Search by name or SKU..." value={search} onChange={(_, d) => setSearch(d.value)} style={{ maxWidth: 320 }} />
-        </div>
-        {filtered.length === 0 ? (
-          <EmptyState title="No products found" description="Add your first product to get started." action={{ label: 'Add Product', onClick: () => setFormOpen(true) }} />
-        ) : (
-          <ProductsTable
-            products={filtered}
-            onEdit={(p) => { setEditing(p); setFormOpen(true); }}
-            onDelete={setDeleteTarget}
-          />
-        )}
+    <div className={styles.content}>
+      {opError && (
+        <MessageBar intent="error">
+          <MessageBarBody>{opError}</MessageBarBody>
+          <MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} />
+        </MessageBar>
+      )}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <Input
+          placeholder="Search by name or SKU..."
+          value={search}
+          onChange={(_, d) => setSearch(d.value)}
+          style={{ maxWidth: 280, backgroundColor: 'white', border: '1px solid var(--p-border)' }}
+        />
+        <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
+          Add Product
+        </Button>
       </div>
+      {filtered.length === 0 ? (
+        <EmptyState title="No products found" description="Add your first product to get started." action={{ label: 'Add Product', onClick: () => setFormOpen(true) }} />
+      ) : (
+        <ProductsTable
+          products={filtered}
+          onEdit={(p) => { setEditing(p); setFormOpen(true); }}
+          onDelete={setDeleteTarget}
+        />
+      )}
       <ProductForm
         open={formOpen}
         product={editing}
@@ -99,6 +106,6 @@ export default function ProductsPage() {
           onConfirm={handleDelete}
         />
       )}
-    </>
+    </div>
   );
 }

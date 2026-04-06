@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { tokens, Button, Spinner, MessageBar, MessageBarBody, MessageBarActions, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
+import { Button, Spinner, MessageBar, MessageBarBody, MessageBarActions, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
 import { Add20Regular } from '@fluentui/react-icons';
-import { Header } from '../../../components/shell/Header';
 import { CategoriesGrid } from '../../../components/categories/CategoriesGrid';
 import { EmptyState } from '../../../components/shared/EmptyState';
 import { RoleGuard } from '../../../components/shared/RoleGuard';
@@ -46,17 +45,14 @@ export default function CategoriesPage() {
 
   return (
     <>
-      <Header
-        title="Categories"
-        actions={
+      <div style={{ padding: '28px 32px', backgroundColor: 'var(--p-bg)', minHeight: '100%' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
           <RoleGuard minRole="MANAGER">
             <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setName(''); setDialogOpen(true); }}>
               Add Category
             </Button>
           </RoleGuard>
-        }
-      />
-      <div style={{ padding: tokens.spacingVerticalL }}>
+        </div>
         {opError && <MessageBar intent="error"><MessageBarBody>{opError}</MessageBarBody><MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} /></MessageBar>}
         {(categories ?? []).length === 0 ? (
           <EmptyState title="No categories yet" description="Organise your products by adding categories." action={{ label: 'Add Category', onClick: () => setDialogOpen(true) }} />

@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { Auth0ManagementService } from '../auth/auth0-management.service';
 import { NotFoundException } from '@nestjs/common';
 import { Role } from '@prisma/client';
 
@@ -14,6 +15,10 @@ const mockPrisma = {
   },
 };
 
+const mockAuth0Management = {
+  syncRole: jest.fn().mockResolvedValue(undefined),
+};
+
 const user = { id: 'u1', auth0Id: 'auth0|abc', email: 'a@b.com', name: 'Alice', role: Role.STAFF, createdAt: new Date(), updatedAt: new Date() };
 
 describe('UsersService', () => {
@@ -22,7 +27,11 @@ describe('UsersService', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     const module = await Test.createTestingModule({
-      providers: [UsersService, { provide: PrismaService, useValue: mockPrisma }],
+      providers: [
+        UsersService,
+        { provide: PrismaService, useValue: mockPrisma },
+        { provide: Auth0ManagementService, useValue: mockAuth0Management },
+      ],
     }).compile();
     service = module.get(UsersService);
   });
@@ -53,7 +62,6 @@ describe('UsersService', () => {
   });
 
   it('update calls prisma.user.update when user exists', async () => {
-    const user = { id: 'u1', auth0Id: 'auth0|123', email: 'a@b.com', name: 'Alice', role: Role.STAFF };
     mockPrisma.user.findUnique.mockResolvedValue(user);
     mockPrisma.user.update.mockResolvedValue({ ...user, name: 'Alice B' });
     await service.update('u1', { name: 'Alice B' });
@@ -66,5 +74,19 @@ describe('UsersService', () => {
   it('update throws NotFoundException when user not found', async () => {
     mockPrisma.user.findUnique.mockResolvedValue(null);
     await expect(service.update('missing', { name: 'X' })).rejects.toThrow(NotFoundException);
+  });
+
+  it('update calls syncRole when role is provided', async () => {
+    mockPrisma.user.findUnique.mockResolvedValue(user);
+    mockPrisma.user.update.mockResolvedValue({ ...user, role: Role.MANAGER });
+    await service.update('u1', { role: Role.MANAGER });
+    expect(mockAuth0Management.syncRole).toHaveBeenCalledWith('auth0|abc', Role.MANAGER);
+  });
+
+  it('update does not call syncRole when role is not provided', async () => {
+    mockPrisma.user.findUnique.mockResolvedValue(user);
+    mockPrisma.user.update.mockResolvedValue({ ...user, name: 'Alice B' });
+    await service.update('u1', { name: 'Alice B' });
+    expect(mockAuth0Management.syncRole).not.toHaveBeenCalled();
   });
 });

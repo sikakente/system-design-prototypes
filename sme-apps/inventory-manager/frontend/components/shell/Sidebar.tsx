@@ -136,11 +136,8 @@ export function Sidebar() {
               </MenuGroupHeader>
             </MenuGroup>
             <MenuDivider />
-            <MenuItem
-              icon={<SignOut20Regular />}
-              onClick={() => { window.location.href = '/auth/logout'; }}
-            >
-              Sign out
+            <MenuItem icon={<SignOut20Regular />}>
+              <a href="/auth/logout">Sign out</a>
             </MenuItem>
           </MenuList>
         </MenuPopover>

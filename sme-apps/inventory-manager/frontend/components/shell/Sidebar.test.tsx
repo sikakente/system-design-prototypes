@@ -34,7 +34,7 @@ vi.mock('@fluentui/react-components', () => ({
   MenuGroupHeader: ({ children, className }: any) => <div className={className}>{children}</div>,
   MenuDivider: () => <hr />,
   MenuItem: ({ children, onClick }: any) => (
-    <button role="menuitem" onClick={onClick}>{children}</button>
+    <div role="menuitem" onClick={onClick}>{children}</div>
   ),
 }));
 
@@ -82,14 +82,15 @@ describe('Sidebar', () => {
     expect(screen.getByText('MANAGER')).toBeInTheDocument();
   });
 
-  it('renders a sign out menu item linking to /auth/logout', () => {
+  it('renders a sign out menu item with a link to /auth/logout', () => {
     vi.mocked(AuthContextModule.useAuth).mockReturnValue({
       user: { name: 'Alice Smith' } as any,
       role: 'STAFF',
       isLoading: false,
     });
     render(<Sidebar />);
-    expect(screen.getByRole('menuitem', { name: /sign out/i })).toBeInTheDocument();
+    const link = screen.getByRole('link', { name: /sign out/i });
+    expect(link).toHaveAttribute('href', '/auth/logout');
   });
 
   it('falls back to "User" when user is undefined', () => {

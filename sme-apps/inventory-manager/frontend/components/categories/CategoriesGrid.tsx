@@ -1,8 +1,40 @@
 'use client';
-import { Button } from '@fluentui/react-components';
+import { makeStyles, tokens, Button, Text, Card } from '@fluentui/react-components';
 import { Delete20Regular, Edit20Regular } from '@fluentui/react-icons';
 import { RoleGuard } from '../shared/RoleGuard';
 import type { Category } from '../../hooks/useCategories';
+
+const useStyles = makeStyles({
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+    gap: '14px',
+  },
+  cardName: {
+    fontSize: '15px',
+    fontWeight: tokens.fontWeightSemibold,
+    color: tokens.colorNeutralForeground1,
+    fontFamily: tokens.fontFamilyBase,
+    display: 'block',
+  },
+  cardCount: {
+    fontSize: '12px',
+    color: tokens.colorNeutralForeground2,
+    fontFamily: tokens.fontFamilyBase,
+    marginTop: '4px',
+    display: 'block',
+  },
+  cardActions: {
+    display: 'flex',
+    gap: '4px',
+    marginTop: '12px',
+  },
+  card: {
+    borderRadius: tokens.borderRadiusLarge,
+    padding: '20px',
+    boxShadow: tokens.shadow4,
+  },
+});
 
 interface CategoriesGridProps {
   categories: Category[];
@@ -11,56 +43,23 @@ interface CategoriesGridProps {
 }
 
 export function CategoriesGrid({ categories, onEdit, onDelete }: CategoriesGridProps) {
+  const styles = useStyles();
+
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '14px',
-      }}
-    >
+    <div className={styles.grid}>
       {categories.map((cat) => (
-        <div
-          key={cat.id}
-          style={{
-            backgroundColor: 'var(--p-card)',
-            border: '1px solid var(--p-border)',
-            borderRadius: '12px',
-            padding: '20px',
-            boxShadow: 'var(--p-shadow)',
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: 'var(--p-sans)',
-              fontSize: '15px',
-              fontWeight: 600,
-              color: 'var(--p-text)',
-              margin: 0,
-            }}
-          >
-            {cat.name}
-          </h3>
-          <p
-            style={{
-              fontFamily: 'var(--p-sans)',
-              fontSize: '12px',
-              color: 'var(--p-text-2)',
-              marginTop: '4px',
-              marginBottom: 0,
-            }}
-          >
-            {cat._count.products} products
-          </p>
+        <Card key={cat.id} className={styles.card}>
+          <Text className={styles.cardName}>{cat.name}</Text>
+          <Text className={styles.cardCount}>{cat._count.products} products</Text>
           <RoleGuard minRole="MANAGER">
-            <div style={{ display: 'flex', gap: '4px', marginTop: '12px' }}>
+            <div className={styles.cardActions}>
               <Button icon={<Edit20Regular />} appearance="subtle" size="small" onClick={() => onEdit(cat)} />
               <RoleGuard minRole="ADMIN">
                 <Button icon={<Delete20Regular />} appearance="subtle" size="small" onClick={() => onDelete(cat)} />
               </RoleGuard>
             </div>
           </RoleGuard>
-        </div>
+        </Card>
       ))}
     </div>
   );

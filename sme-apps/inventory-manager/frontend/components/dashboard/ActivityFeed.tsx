@@ -1,29 +1,25 @@
-import { makeStyles } from '@fluentui/react-components';
+import { Card, makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
 import type { Product } from '../../hooks/useProducts';
-
-function cx(...c: (string | false | undefined)[]) {
-  return c.filter(Boolean).join(' ');
-}
 
 const useStyles = makeStyles({
   card: {
-    backgroundColor: 'var(--p-card)',
-    border: '1px solid var(--p-border)',
-    borderRadius: '12px',
-    padding: '24px',
-    boxShadow: 'var(--p-shadow)',
+    backgroundColor: tokens.colorNeutralBackground1,
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: tokens.borderRadius2XLarge,
+    padding: tokens.spacingHorizontalXXL,
+    boxShadow: tokens.shadow4,
   },
   heading: {
-    fontSize: '10px',
-    fontWeight: '600',
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    color: 'var(--p-text-3)',
+    color: tokens.colorNeutralForeground3,
     marginBottom: '20px',
   },
   empty: {
     fontSize: '13px',
-    color: 'var(--p-text-2)',
+    color: tokens.colorNeutralForeground2,
     fontStyle: 'italic',
   },
   timeline: {
@@ -49,20 +45,20 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
     paddingTop: '4px',
-    flexShrink: 0,
+    flexShrink: '0',
   },
   dot: {
     width: '7px',
     height: '7px',
     borderRadius: '50%',
-    backgroundColor: 'var(--p-primary)',
-    flexShrink: 0,
+    backgroundColor: tokens.colorBrandBackground,
+    flexShrink: '0',
   },
   line: {
     width: '1px',
     flex: '1',
     minHeight: '16px',
-    backgroundColor: 'var(--p-border)',
+    backgroundColor: tokens.colorNeutralStroke1,
     marginTop: '4px',
   },
   itemBody: {
@@ -72,16 +68,16 @@ const useStyles = makeStyles({
     alignItems: 'flex-start',
     minWidth: '0',
     paddingBottom: '14px',
-    borderBottom: '1px solid var(--p-border)',
+    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
   },
   itemBodyLast: {
-    borderBottom: 'none',
+    borderBottomStyle: 'none',
     paddingBottom: '0',
   },
   name: {
     fontSize: '13px',
-    fontWeight: '500',
-    color: 'var(--p-text)',
+    fontWeight: tokens.fontWeightSemibold,
+    color: tokens.colorNeutralForeground1,
     marginBottom: '2px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -90,13 +86,13 @@ const useStyles = makeStyles({
   },
   qty: {
     fontSize: '11px',
-    color: 'var(--p-primary)',
+    color: tokens.colorBrandForeground1,
   },
   time: {
-    fontSize: '10px',
-    color: 'var(--p-text-3)',
+    fontSize: tokens.fontSizeBase200,
+    color: tokens.colorNeutralForeground3,
     whiteSpace: 'nowrap',
-    flexShrink: 0,
+    flexShrink: '0',
     paddingTop: '1px',
   },
 });
@@ -112,7 +108,7 @@ export function ActivityFeed({ products }: ActivityFeedProps) {
     .slice(0, 6);
 
   return (
-    <div className={styles.card}>
+    <Card className={styles.card}>
       <div className={styles.heading}>Recent Activity</div>
       {recent.length === 0 ? (
         <div className={styles.empty}>No recent changes</div>
@@ -128,7 +124,7 @@ export function ActivityFeed({ products }: ActivityFeedProps) {
                 <div className={styles.dot} />
                 {i < recent.length - 1 && <div className={styles.line} />}
               </div>
-              <div className={cx(styles.itemBody, i === recent.length - 1 && styles.itemBodyLast)}>
+              <div className={mergeClasses(styles.itemBody, i === recent.length - 1 ? styles.itemBodyLast : undefined)}>
                 <div>
                   <div className={styles.name}>{p.name}</div>
                   <div className={styles.qty}>qty {p.quantity}</div>
@@ -141,6 +137,6 @@ export function ActivityFeed({ products }: ActivityFeedProps) {
           ))}
         </ul>
       )}
-    </div>
+    </Card>
   );
 }

@@ -1,9 +1,5 @@
 "use client";
-import {
-  Spinner,
-  MessageBar,
-  MessageBarBody,
-} from "@fluentui/react-components";
+import { makeStyles, tokens, Spinner, MessageBar, MessageBarBody } from "@fluentui/react-components";
 import { TeamTable } from "../../../components/team/TeamTable";
 import { EmptyState } from "../../../components/shared/EmptyState";
 import {
@@ -14,7 +10,19 @@ import {
 } from "../../../hooks/useTeam";
 import { mutate } from "swr";
 
+const useStyles = makeStyles({
+  page: {
+    padding: '28px 32px',
+    backgroundColor: tokens.colorNeutralBackground2,
+    minHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+});
+
 export default function TeamPage() {
+  const styles = useStyles();
   const { data: members, isLoading, error } = useTeam();
 
   const handleUpdateRole = async (id: string, newRole: Role) => {
@@ -36,16 +44,7 @@ export default function TeamPage() {
     );
 
   return (
-    <div
-      style={{
-        padding: '28px 32px',
-        backgroundColor: 'var(--p-bg)',
-        minHeight: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-      }}
-    >
+    <div className={styles.page}>
       <MessageBar intent="info">
         <MessageBarBody>
           Role changes take effect on the user&apos;s next login.

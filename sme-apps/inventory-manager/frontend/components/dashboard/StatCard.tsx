@@ -1,17 +1,17 @@
 import React from 'react';
-import { makeStyles, mergeClasses } from '@fluentui/react-components';
+import { Card, makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   card: {
-    backgroundColor: 'var(--p-card)',
-    padding: '24px',
-    borderRadius: '16px',
-    border: '1px solid var(--p-border)',
-    boxShadow: 'var(--p-shadow)',
-    minHeight: '160px',
+    minHeight: '140px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    padding: tokens.spacingHorizontalXXL,
+    backgroundColor: tokens.colorNeutralBackground1,
+    boxShadow: tokens.shadow4,
+    borderRadius: tokens.borderRadius2XLarge,
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
     animationName: {
       from: { opacity: '0', transform: 'translateY(8px)' },
       to: { opacity: '1', transform: 'translateY(0)' },
@@ -21,32 +21,32 @@ const useStyles = makeStyles({
     animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
   },
   cardFeatured: {
-    backgroundColor: 'var(--p-primary)',
-    border: '1px solid var(--p-primary)',
+    backgroundColor: tokens.colorBrandBackground,
+    border: `1px solid ${tokens.colorBrandBackground}`,
   },
   iconBox: {
     width: '36px',
     height: '36px',
-    borderRadius: '10px',
-    backgroundColor: 'var(--p-primary-50)',
+    borderRadius: tokens.borderRadiusLarge,
+    backgroundColor: tokens.colorBrandBackground2,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--p-primary)',
-    flexShrink: 0,
+    color: tokens.colorBrandForeground1,
+    flexShrink: '0',
   },
   iconBoxFeatured: {
     backgroundColor: 'rgba(255,255,255,0.2)',
-    color: 'white',
+    color: tokens.colorNeutralForegroundOnBrand,
   },
   bottom: {
     display: 'flex',
     flexDirection: 'column',
   },
   label: {
-    fontSize: '12px',
-    fontWeight: '500',
-    color: 'var(--p-text-2)',
+    fontSize: tokens.fontSizeBase300,
+    fontWeight: tokens.fontWeightSemibold,
+    color: tokens.colorNeutralForeground2,
     marginBottom: '4px',
   },
   labelFeatured: {
@@ -54,17 +54,17 @@ const useStyles = makeStyles({
   },
   value: {
     fontSize: '26px',
-    fontWeight: '700',
-    color: 'var(--p-text)',
+    fontWeight: tokens.fontWeightBold,
+    color: tokens.colorNeutralForeground1,
     letterSpacing: '-0.02em',
-    fontFamily: 'var(--p-sans)',
+    fontFamily: tokens.fontFamilyBase,
     lineHeight: '1',
   },
   valueFeatured: {
-    color: 'white',
+    color: tokens.colorNeutralForegroundOnBrand,
   },
   valueDanger: {
-    color: 'var(--p-red)',
+    color: tokens.colorPaletteRedForeground2,
   },
 });
 
@@ -88,7 +88,7 @@ export function StatCard({
   const styles = useStyles();
 
   return (
-    <div
+    <Card
       className={mergeClasses(styles.card, featured ? styles.cardFeatured : undefined)}
       style={animationDelay ? { animationDelay } : undefined}
     >
@@ -109,6 +109,6 @@ export function StatCard({
           {value}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Button, Spinner, MessageBar, MessageBarBody, MessageBarActions, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
+import { makeStyles, tokens, Button, Spinner, MessageBar, MessageBarBody, MessageBarActions, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
 import { Add20Regular } from '@fluentui/react-icons';
 import { CategoriesGrid } from '../../../components/categories/CategoriesGrid';
 import { EmptyState } from '../../../components/shared/EmptyState';
@@ -8,7 +8,21 @@ import { RoleGuard } from '../../../components/shared/RoleGuard';
 import { useCategories, createCategory, updateCategory, deleteCategory, type Category } from '../../../hooks/useCategories';
 import { mutate } from 'swr';
 
+const useStyles = makeStyles({
+  page: {
+    padding: '28px 32px',
+    backgroundColor: tokens.colorNeutralBackground2,
+    minHeight: '100%',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: '20px',
+  },
+});
+
 export default function CategoriesPage() {
+  const styles = useStyles();
   const { data: categories, isLoading, error } = useCategories();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Category | undefined>();
@@ -45,8 +59,8 @@ export default function CategoriesPage() {
 
   return (
     <>
-      <div style={{ padding: '28px 32px', backgroundColor: 'var(--p-bg)', minHeight: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+      <div className={styles.page}>
+        <div className={styles.header}>
           <RoleGuard minRole="MANAGER">
             <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setName(''); setDialogOpen(true); }}>
               Add Category

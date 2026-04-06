@@ -1,13 +1,13 @@
-import { makeStyles, mergeClasses } from '@fluentui/react-components';
+import { Card, makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
 import type { Product } from '../../hooks/useProducts';
 
 const useStyles = makeStyles({
   card: {
-    backgroundColor: 'var(--p-card)',
-    border: '1px solid var(--p-border)',
-    borderRadius: '12px',
-    padding: '24px',
-    boxShadow: 'var(--p-shadow)',
+    backgroundColor: tokens.colorNeutralBackground1,
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: tokens.borderRadius2XLarge,
+    padding: tokens.spacingHorizontalXXL,
+    boxShadow: tokens.shadow4,
     position: 'relative',
   },
   topBarDanger: {
@@ -16,8 +16,8 @@ const useStyles = makeStyles({
     left: '0',
     right: '0',
     height: '2px',
-    backgroundColor: 'var(--p-red)',
-    borderRadius: '12px 12px 0 0',
+    backgroundColor: tokens.colorPaletteRedForeground2,
+    borderRadius: `${tokens.borderRadius2XLarge} ${tokens.borderRadius2XLarge} 0 0`,
   },
   topBarHealthy: {
     position: 'absolute',
@@ -25,34 +25,34 @@ const useStyles = makeStyles({
     left: '0',
     right: '0',
     height: '2px',
-    backgroundColor: 'var(--p-green)',
-    borderRadius: '12px 12px 0 0',
+    backgroundColor: tokens.colorPaletteGreenForeground2,
+    borderRadius: `${tokens.borderRadius2XLarge} ${tokens.borderRadius2XLarge} 0 0`,
   },
   heading: {
-    fontSize: '10px',
-    fontWeight: '600',
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    color: 'var(--p-text-3)',
+    color: tokens.colorNeutralForeground3,
     marginBottom: '6px',
   },
   countDanger: {
     fontSize: '28px',
-    fontWeight: '700',
+    fontWeight: tokens.fontWeightBold,
     lineHeight: '1',
-    color: 'var(--p-red)',
+    color: tokens.colorPaletteRedForeground2,
     letterSpacing: '-0.03em',
     marginBottom: '16px',
-    fontFamily: 'var(--p-sans)',
+    fontFamily: tokens.fontFamilyBase,
   },
   countHealthy: {
     fontSize: '28px',
-    fontWeight: '700',
+    fontWeight: tokens.fontWeightBold,
     lineHeight: '1',
-    color: 'var(--p-green)',
+    color: tokens.colorPaletteGreenForeground2,
     letterSpacing: '-0.03em',
     marginBottom: '16px',
-    fontFamily: 'var(--p-sans)',
+    fontFamily: tokens.fontFamilyBase,
   },
   list: {
     listStyle: 'none',
@@ -66,7 +66,7 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '8px 0',
-    borderBottom: '1px solid var(--p-border)',
+    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
     animationName: {
       from: { opacity: '0', transform: 'translateX(-6px)' },
       to: { opacity: '1', transform: 'translateX(0)' },
@@ -76,12 +76,12 @@ const useStyles = makeStyles({
     animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
   },
   listItemLast: {
-    borderBottom: 'none',
+    borderBottomStyle: 'none',
   },
   itemName: {
-    fontSize: '12px',
-    fontWeight: '500',
-    color: 'var(--p-text)',
+    fontSize: tokens.fontSizeBase300,
+    fontWeight: tokens.fontWeightSemibold,
+    color: tokens.colorNeutralForeground1,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -89,13 +89,13 @@ const useStyles = makeStyles({
   },
   itemQty: {
     fontSize: '11px',
-    color: 'var(--p-red)',
-    fontWeight: '600',
-    flexShrink: 0,
+    color: tokens.colorPaletteRedForeground2,
+    fontWeight: tokens.fontWeightSemibold,
+    flexShrink: '0',
   },
   healthyMsg: {
-    fontSize: '12px',
-    color: 'var(--p-green)',
+    fontSize: tokens.fontSizeBase300,
+    color: tokens.colorPaletteGreenForeground2,
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
@@ -112,7 +112,7 @@ export function LowStockPanel({ alerts }: LowStockPanelProps) {
   const visible = alerts.slice(0, 6);
 
   return (
-    <div className={styles.card}>
+    <Card className={styles.card}>
       <div className={isHealthy ? styles.topBarHealthy : styles.topBarDanger} />
       <div className={styles.heading}>Low Stock</div>
       <div className={isHealthy ? styles.countHealthy : styles.countDanger}>
@@ -140,6 +140,6 @@ export function LowStockPanel({ alerts }: LowStockPanelProps) {
           ))}
         </ul>
       )}
-    </div>
+    </Card>
   );
 }

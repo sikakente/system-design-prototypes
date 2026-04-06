@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, Button, Input, Spinner, MessageBar, MessageBarBody, MessageBarActions } from '@fluentui/react-components';
+import { makeStyles, Button, Input, Spinner, MessageBar, MessageBarBody, MessageBarActions, tokens } from '@fluentui/react-components';
 import { Add20Regular } from '@fluentui/react-icons';
 import { ProductsTable } from '../../../components/products/ProductsTable';
 import { ProductForm } from '../../../components/products/ProductForm';
@@ -13,7 +13,7 @@ import { mutate } from 'swr';
 const useStyles = makeStyles({
   content: {
     padding: '28px 32px',
-    backgroundColor: 'var(--p-bg)',
+    backgroundColor: tokens.colorNeutralBackground2,
     minHeight: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -75,7 +75,7 @@ export default function ProductsPage() {
           placeholder="Search by name or SKU..."
           value={search}
           onChange={(_, d) => setSearch(d.value)}
-          style={{ maxWidth: 280, backgroundColor: 'white', border: '1px solid var(--p-border)' }}
+          style={{ maxWidth: 280 }}
         />
         <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
           Add Product

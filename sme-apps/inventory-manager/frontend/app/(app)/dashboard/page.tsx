@@ -1,5 +1,5 @@
 'use client';
-import { makeStyles } from '@fluentui/react-components';
+import { makeStyles, tokens } from '@fluentui/react-components';
 import { Box20Regular, Alert20Regular, Tag20Regular, People20Regular } from '@fluentui/react-icons';
 import { StatCard } from '../../../components/dashboard/StatCard';
 import { ActivityFeed } from '../../../components/dashboard/ActivityFeed';
@@ -12,23 +12,23 @@ import { useTeam } from '../../../hooks/useTeam';
 const useStyles = makeStyles({
   page: {
     minHeight: '100%',
-    backgroundColor: 'var(--p-bg)',
+    backgroundColor: tokens.colorNeutralBackground2,
   },
   content: {
     padding: '28px 32px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+    gap: tokens.spacingVerticalXXL,
   },
   stats: {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '16px',
+    gap: tokens.spacingVerticalXL,
   },
   bottom: {
     display: 'grid',
     gridTemplateColumns: '2fr 1fr',
-    gap: '16px',
+    gap: tokens.spacingVerticalXL,
   },
 });
 

@@ -1,36 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-:root {
-  --p-bg: #EEF1F8;
-  --p-sidebar-bg: #FFFFFF;
-  --p-card: #FFFFFF;
-  --p-header-bg: #FFFFFF;
-  --p-primary: #4F46E5;
-  --p-primary-50: #EEF2FF;
-  --p-primary-100: #E0E7FF;
-  --p-text: #0F172A;
-  --p-text-2: #64748B;
-  --p-text-3: #94A3B8;
-  --p-border: #E2E8F0;
-  --p-green: #10B981;
-  --p-red: #EF4444;
-  --p-orange: #F59E0B;
-  --p-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-  --p-sans: 'Plus Jakarta Sans', sans-serif;
-}
-
 html { height: 100%; }
 html, body { max-width: 100vw; overflow-x: hidden; }
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  font-family: var(--p-sans);
-  background-color: var(--p-bg);
-  color: var(--p-text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+body { min-height: 100%; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 * { box-sizing: border-box; padding: 0; margin: 0; }
 a { color: inherit; text-decoration: none; }
-h1, h2, h3, h4, h5, h6 { font-family: var(--p-sans); }

@@ -7,14 +7,14 @@ type MenuItem = GetProp<MenuProps, 'items'>[number];
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import {
-  Home20Regular,
-  Box20Regular,
-  Tag20Regular,
-  Alert20Regular,
-  People20Regular,
-  SignOut20Regular,
-  ChevronDown20Regular,
-} from '@fluentui/react-icons';
+  HomeOutlined,
+  InboxOutlined,
+  TagOutlined,
+  AlertOutlined,
+  TeamOutlined,
+  LogoutOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { Text } = Typography;
@@ -22,15 +22,15 @@ const { Text } = Typography;
 const ROLE_RANK: Record<string, number> = { STAFF: 0, MANAGER: 1, ADMIN: 2 };
 
 const BASE_NAV: MenuItem[] = [
-  { key: '/dashboard', icon: <Home20Regular />, label: <Link href="/dashboard">Dashboard</Link> },
-  { key: '/products', icon: <Box20Regular />, label: <Link href="/products">Products</Link> },
-  { key: '/categories', icon: <Tag20Regular />, label: <Link href="/categories">Categories</Link> },
-  { key: '/alerts', icon: <Alert20Regular />, label: <Link href="/alerts">Reorder Alerts</Link> },
+  { key: '/dashboard', icon: <HomeOutlined />, label: <Link href="/dashboard">Dashboard</Link> },
+  { key: '/products', icon: <InboxOutlined />, label: <Link href="/products">Products</Link> },
+  { key: '/categories', icon: <TagOutlined />, label: <Link href="/categories">Categories</Link> },
+  { key: '/alerts', icon: <AlertOutlined />, label: <Link href="/alerts">Reorder Alerts</Link> },
 ];
 
 const TEAM_ITEM: MenuItem = {
   key: '/team',
-  icon: <People20Regular />,
+  icon: <TeamOutlined />,
   label: <Link href="/team">Team</Link>,
 };
 
@@ -59,7 +59,7 @@ export function Sidebar() {
     { type: 'divider' },
     {
       key: 'signout',
-      icon: <SignOut20Regular />,
+      icon: <LogoutOutlined />,
       label: <a href="/auth/logout">Sign out</a>,
     },
   ];
@@ -118,7 +118,7 @@ export function Sidebar() {
               </div>
               <div style={{ fontSize: 11, color: '#8c8c8c', lineHeight: 1.3 }}>{role}</div>
             </div>
-            <ChevronDown20Regular />
+            <DownOutlined />
           </button>
         </Dropdown>
       </div>

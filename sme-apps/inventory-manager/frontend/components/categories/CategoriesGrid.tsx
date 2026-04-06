@@ -1,6 +1,6 @@
 'use client';
 import { Card, Typography, Space, Button } from 'antd';
-import { Delete20Regular, Edit20Regular } from '@fluentui/react-icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { RoleGuard } from '../shared/RoleGuard';
 import type { Category } from '../../hooks/useCategories';
 
@@ -21,9 +21,9 @@ export function CategoriesGrid({ categories, onEdit, onDelete }: CategoriesGridP
           <Text type="secondary" style={{ fontSize: 12 }}>{cat._count.products} products</Text>
           <RoleGuard minRole="MANAGER">
             <Space style={{ marginTop: 12 }}>
-              <Button type="text" icon={<Edit20Regular />} size="small" onClick={() => onEdit(cat)} />
+              <Button type="text" icon={<EditOutlined />} size="small" onClick={() => onEdit(cat)} />
               <RoleGuard minRole="ADMIN">
-                <Button type="text" icon={<Delete20Regular />} size="small" danger onClick={() => onDelete(cat)} />
+                <Button type="text" icon={<DeleteOutlined />} size="small" danger onClick={() => onDelete(cat)} />
               </RoleGuard>
             </Space>
           </RoleGuard>

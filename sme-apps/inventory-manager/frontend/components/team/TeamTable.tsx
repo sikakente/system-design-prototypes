@@ -1,7 +1,7 @@
 'use client';
 import { Table, Avatar, Select, Button, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Delete20Regular } from '@fluentui/react-icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { RoleGuard } from '../shared/RoleGuard';
 import type { TeamMember, Role } from '../../hooks/useTeam';
 
@@ -49,7 +49,7 @@ export function TeamTable({ members, onUpdateRole, onRemove }: TeamTableProps) {
       key: 'actions',
       render: (_, m) => (
         <RoleGuard minRole="MANAGER">
-          <Button type="text" icon={<Delete20Regular />} danger onClick={() => onRemove(m)} />
+          <Button type="text" icon={<DeleteOutlined />} danger onClick={() => onRemove(m)} />
         </RoleGuard>
       ),
     },

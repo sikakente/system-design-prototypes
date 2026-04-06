@@ -1,7 +1,7 @@
 'use client';
 import { Table, Button, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Delete20Regular, Edit20Regular } from '@fluentui/react-icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { StockBadge } from './StockBadge';
 import { RoleGuard } from '../shared/RoleGuard';
 import type { Product } from '../../hooks/useProducts';
@@ -25,10 +25,10 @@ export function ProductsTable({ products, onEdit, onDelete }: ProductsTableProps
       render: (_, p) => (
         <Space>
           <RoleGuard minRole="STAFF">
-            <Button type="text" icon={<Edit20Regular />} onClick={() => onEdit(p)} />
+            <Button type="text" icon={<EditOutlined />} onClick={() => onEdit(p)} />
           </RoleGuard>
           <RoleGuard minRole="MANAGER">
-            <Button type="text" icon={<Delete20Regular />} onClick={() => onDelete(p)} danger />
+            <Button type="text" icon={<DeleteOutlined />} onClick={() => onDelete(p)} danger />
           </RoleGuard>
         </Space>
       ),

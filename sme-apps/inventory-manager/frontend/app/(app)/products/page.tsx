@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Button, Input, Spin, Alert } from 'antd';
-import { Add20Regular } from '@fluentui/react-icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { ProductsTable } from '../../../components/products/ProductsTable';
 import { ProductForm } from '../../../components/products/ProductForm';
 import { EmptyState } from '../../../components/shared/EmptyState';
@@ -74,7 +74,7 @@ export default function ProductsPage() {
           onChange={(e) => setSearch(e.target.value)}
           style={{ maxWidth: 280 }}
         />
-        <Button type="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
           Add Product
         </Button>
       </div>

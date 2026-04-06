@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Button, Spin, Alert, Modal, Form, Input } from 'antd';
-import { Add20Regular } from '@fluentui/react-icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { CategoriesGrid } from '../../../components/categories/CategoriesGrid';
 import { EmptyState } from '../../../components/shared/EmptyState';
 import { RoleGuard } from '../../../components/shared/RoleGuard';
@@ -51,7 +51,7 @@ export default function CategoriesPage() {
     <div style={{ padding: '28px 32px', background: '#f5f5f5', minHeight: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
         <RoleGuard minRole="MANAGER">
-          <Button type="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setName(''); setDialogOpen(true); }}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditing(undefined); setName(''); setDialogOpen(true); }}>
             Add Category
           </Button>
         </RoleGuard>

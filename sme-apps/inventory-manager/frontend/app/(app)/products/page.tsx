@@ -7,7 +7,6 @@ import { ProductsTable } from '../../../components/products/ProductsTable';
 import { ProductForm } from '../../../components/products/ProductForm';
 import { EmptyState } from '../../../components/shared/EmptyState';
 import { ConfirmDialog } from '../../../components/shared/ConfirmDialog';
-import { RoleGuard } from '../../../components/shared/RoleGuard';
 import { useProducts, createProduct, updateProduct, deleteProduct, type Product } from '../../../hooks/useProducts';
 import { useCategories } from '../../../hooks/useCategories';
 import { mutate } from 'swr';
@@ -64,11 +63,9 @@ export default function ProductsPage() {
       <Header
         title="Products"
         actions={
-          <RoleGuard minRole="MANAGER">
-            <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
-              Add Product
-            </Button>
-          </RoleGuard>
+          <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setFormOpen(true); }}>
+            Add Product
+          </Button>
         }
       />
       <div className={styles.content}>

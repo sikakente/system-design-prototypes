@@ -45,7 +45,7 @@ export function ProductsTable({ products, onEdit, onDelete }: ProductsTableProps
       renderHeaderCell: () => '',
       renderCell: (p) => (
         <div className={styles.actions}>
-          <RoleGuard minRole="MANAGER">
+          <RoleGuard minRole="STAFF">
             <Button icon={<Edit20Regular />} appearance="subtle" onClick={() => onEdit(p)} />
           </RoleGuard>
           <RoleGuard minRole="MANAGER">

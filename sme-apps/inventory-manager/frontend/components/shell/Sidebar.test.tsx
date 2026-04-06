@@ -24,7 +24,7 @@ vi.mock('@fluentui/react-components', () => ({
   Body1Strong: ({ children }: any) => <span>{children}</span>,
   Caption1: ({ children }: any) => <span>{children}</span>,
   Avatar: ({ name, 'aria-label': ariaLabel }: any) => (
-    <button aria-label={ariaLabel ?? name}>{name}</button>
+    <button aria-label={ariaLabel ?? name}></button>
   ),
   Menu: ({ children }: any) => <div>{children}</div>,
   MenuTrigger: ({ children }: any) => <div>{children}</div>,

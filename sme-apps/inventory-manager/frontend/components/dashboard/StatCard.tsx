@@ -37,11 +37,13 @@ export function StatCard({ label, value, icon, featured = false, accent = 'defau
         <Statistic
           title={<span style={{ color: featured ? 'rgba(255,255,255,0.8)' : undefined, fontSize: 12 }}>{label}</span>}
           value={value}
-          valueStyle={{
-            color: featured ? '#fff' : accent === 'danger' ? '#ff4d4f' : undefined,
-            fontSize: 26,
-            fontWeight: 700,
-            lineHeight: 1,
+          styles={{
+            content: {
+              color: featured ? '#fff' : accent === 'danger' ? '#ff4d4f' : undefined,
+              fontSize: 26,
+              fontWeight: 700,
+              lineHeight: 1,
+            },
           }}
         />
       </div>

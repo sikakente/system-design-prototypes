@@ -1,26 +1,16 @@
 'use client';
-import { makeStyles, tokens } from '@fluentui/react-components';
+import { Layout } from 'antd';
 import { Sidebar } from './Sidebar';
 
-const useStyles = makeStyles({
-  shell: {
-    display: 'flex',
-    minHeight: '100vh',
-    backgroundColor: tokens.colorNeutralBackground2,
-  },
-  main: {
-    flex: '1',
-    overflowY: 'auto',
-    backgroundColor: tokens.colorNeutralBackground2,
-  },
-});
-
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const styles = useStyles();
   return (
-    <div className={styles.shell}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Sidebar />
-      <main className={styles.main}>{children}</main>
-    </div>
+      <Layout>
+        <Layout.Content style={{ overflowY: 'auto', backgroundColor: '#f5f5f5' }}>
+          {children}
+        </Layout.Content>
+      </Layout>
+    </Layout>
   );
 }

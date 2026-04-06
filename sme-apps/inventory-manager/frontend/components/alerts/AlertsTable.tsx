@@ -1,77 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, tokens, Button, Input } from '@fluentui/react-components';
+import { Table, Tag, Button, Input, Space } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 import { RoleGuard } from '../shared/RoleGuard';
 import type { Product } from '../../hooks/useProducts';
-
-const useStyles = makeStyles({
-  wrapper: {
-    backgroundColor: tokens.colorNeutralBackground1,
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
-    borderTopColor: tokens.colorNeutralStroke1,
-    borderRightWidth: '1px',
-    borderRightStyle: 'solid',
-    borderRightColor: tokens.colorNeutralStroke1,
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: tokens.colorNeutralStroke1,
-    borderLeftWidth: '1px',
-    borderLeftStyle: 'solid',
-    borderLeftColor: tokens.colorNeutralStroke1,
-    borderRadius: tokens.borderRadiusLarge,
-    overflow: 'hidden',
-    boxShadow: tokens.shadow4,
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    fontFamily: tokens.fontFamilyBase,
-  },
-  th: {
-    padding: '12px 20px',
-    fontSize: '11px',
-    fontWeight: tokens.fontWeightSemibold,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-    color: tokens.colorNeutralForeground3,
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: tokens.colorNeutralStroke1,
-    backgroundColor: tokens.colorNeutralBackground3,
-    textAlign: 'left',
-  },
-  td: {
-    padding: '14px 20px',
-    fontSize: '13px',
-    color: tokens.colorNeutralForeground1,
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: tokens.colorNeutralStroke1,
-  },
-  tdLast: {
-    padding: '14px 20px',
-    fontSize: '13px',
-    color: tokens.colorNeutralForeground1,
-  },
-  stockBadge: {
-    backgroundColor: tokens.colorPaletteRedBackground1,
-    color: tokens.colorPaletteRedForeground2,
-    padding: '2px 8px',
-    borderRadius: '4px',
-    fontSize: '12px',
-    fontWeight: tokens.fontWeightSemibold,
-  },
-  thresholdFallback: {
-    color: tokens.colorNeutralForeground1,
-    fontFamily: tokens.fontFamilyBase,
-  },
-  editRow: {
-    display: 'flex',
-    gap: '6px',
-    alignItems: 'center',
-  },
-});
 
 interface AlertsTableProps {
   alerts: Product[];
@@ -79,7 +11,6 @@ interface AlertsTableProps {
 }
 
 function ThresholdCell({ product, onUpdate }: { product: Product; onUpdate: (id: string, t: number) => Promise<void> }) {
-  const styles = useStyles();
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(String(product.reorderThreshold));
 
@@ -90,56 +21,44 @@ function ThresholdCell({ product, onUpdate }: { product: Product; onUpdate: (id:
 
   if (editing) {
     return (
-      <div className={styles.editRow}>
-        <Input type="number" value={value} onChange={(_, d) => setValue(d.value)} style={{ width: 70 }} />
-        <Button size="small" appearance="primary" onClick={save}>Save</Button>
+      <Space>
+        <Input type="number" value={value} onChange={(e) => setValue(e.target.value)} style={{ width: 70 }} size="small" />
+        <Button size="small" type="primary" onClick={save}>Save</Button>
         <Button size="small" onClick={() => setEditing(false)}>Cancel</Button>
-      </div>
+      </Space>
     );
   }
 
   return (
-    <RoleGuard minRole="MANAGER" fallback={<span className={styles.thresholdFallback}>{product.reorderThreshold}</span>}>
-      <Button appearance="subtle" size="small" onClick={() => setEditing(true)}>{product.reorderThreshold}</Button>
+    <RoleGuard minRole="MANAGER" fallback={<span>{product.reorderThreshold}</span>}>
+      <Button type="text" size="small" onClick={() => setEditing(true)}>{product.reorderThreshold}</Button>
     </RoleGuard>
   );
 }
 
 export function AlertsTable({ alerts, onUpdateThreshold }: AlertsTableProps) {
-  const styles = useStyles();
+  const columns: ColumnsType<Product> = [
+    { title: 'Product', dataIndex: 'name', key: 'name' },
+    { title: 'SKU', dataIndex: 'sku', key: 'sku' },
+    {
+      title: 'Category',
+      key: 'category',
+      render: (_, p) => p.category.name,
+    },
+    {
+      title: 'Stock',
+      key: 'stock',
+      render: (_, p) => {
+        const color = p.quantity === 0 ? 'error' : p.quantity <= p.reorderThreshold ? 'warning' : 'success';
+        return <Tag color={color}>{p.quantity}</Tag>;
+      },
+    },
+    {
+      title: 'Threshold',
+      key: 'threshold',
+      render: (_, p) => <ThresholdCell product={p} onUpdate={onUpdateThreshold} />,
+    },
+  ];
 
-  return (
-    <div className={styles.wrapper}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th className={styles.th}>Product</th>
-            <th className={styles.th}>SKU</th>
-            <th className={styles.th}>Category</th>
-            <th className={styles.th}>Stock</th>
-            <th className={styles.th}>Threshold</th>
-          </tr>
-        </thead>
-        <tbody>
-          {alerts.map((p, index) => {
-            const isLast = index === alerts.length - 1;
-            const cellClass = isLast ? styles.tdLast : styles.td;
-            return (
-              <tr key={p.id}>
-                <td className={cellClass}>{p.name}</td>
-                <td className={cellClass}>{p.sku}</td>
-                <td className={cellClass}>{p.category.name}</td>
-                <td className={cellClass}>
-                  <span className={styles.stockBadge}>{p.quantity}</span>
-                </td>
-                <td className={cellClass}>
-                  <ThresholdCell product={p} onUpdate={onUpdateThreshold} />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
+  return <Table columns={columns} dataSource={alerts} rowKey="id" pagination={false} />;
 }

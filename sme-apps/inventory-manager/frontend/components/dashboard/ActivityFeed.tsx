@@ -1,141 +1,37 @@
-import { Card, makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
+import { Card, Timeline, Typography } from 'antd';
 import type { Product } from '../../hooks/useProducts';
 
-const useStyles = makeStyles({
-  card: {
-    backgroundColor: tokens.colorNeutralBackground1,
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
-    borderRadius: tokens.borderRadius2XLarge,
-    padding: tokens.spacingHorizontalXXL,
-    boxShadow: tokens.shadow4,
-  },
-  heading: {
-    fontSize: tokens.fontSizeBase200,
-    fontWeight: tokens.fontWeightSemibold,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    color: tokens.colorNeutralForeground3,
-    marginBottom: '20px',
-  },
-  empty: {
-    fontSize: '13px',
-    color: tokens.colorNeutralForeground2,
-    fontStyle: 'italic',
-  },
-  timeline: {
-    listStyle: 'none',
-    padding: '0',
-    margin: '0',
-  },
-  item: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '14px',
-    position: 'relative',
-    animationName: {
-      from: { opacity: '0', transform: 'translateX(-6px)' },
-      to: { opacity: '1', transform: 'translateX(0)' },
-    },
-    animationDuration: '0.35s',
-    animationFillMode: 'both',
-    animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-  },
-  timelineTrack: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: '4px',
-    flexShrink: '0',
-  },
-  dot: {
-    width: '7px',
-    height: '7px',
-    borderRadius: '50%',
-    backgroundColor: tokens.colorBrandBackground,
-    flexShrink: '0',
-  },
-  line: {
-    width: '1px',
-    flex: '1',
-    minHeight: '16px',
-    backgroundColor: tokens.colorNeutralStroke1,
-    marginTop: '4px',
-  },
-  itemBody: {
-    flex: '1',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    minWidth: '0',
-    paddingBottom: '14px',
-    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
-  },
-  itemBodyLast: {
-    borderBottomStyle: 'none',
-    paddingBottom: '0',
-  },
-  name: {
-    fontSize: '13px',
-    fontWeight: tokens.fontWeightSemibold,
-    color: tokens.colorNeutralForeground1,
-    marginBottom: '2px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    maxWidth: '200px',
-  },
-  qty: {
-    fontSize: '11px',
-    color: tokens.colorBrandForeground1,
-  },
-  time: {
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground3,
-    whiteSpace: 'nowrap',
-    flexShrink: '0',
-    paddingTop: '1px',
-  },
-});
+const { Text } = Typography;
 
 interface ActivityFeedProps {
   products: Product[];
 }
 
 export function ActivityFeed({ products }: ActivityFeedProps) {
-  const styles = useStyles();
   const recent = [...products]
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 6);
 
+  const items = recent.map((p) => ({
+    children: (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <Text strong style={{ fontSize: 13, display: 'block' }}>{p.name}</Text>
+          <Text type="secondary" style={{ fontSize: 11 }}>qty {p.quantity}</Text>
+        </div>
+        <Text type="secondary" style={{ fontSize: 10, whiteSpace: 'nowrap', paddingTop: 1 }}>
+          {new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        </Text>
+      </div>
+    ),
+  }));
+
   return (
-    <Card className={styles.card}>
-      <div className={styles.heading}>Recent Activity</div>
+    <Card title="Recent Activity">
       {recent.length === 0 ? (
-        <div className={styles.empty}>No recent changes</div>
+        <Text type="secondary" italic>No recent changes</Text>
       ) : (
-        <ul className={styles.timeline}>
-          {recent.map((p, i) => (
-            <li
-              key={p.id}
-              className={styles.item}
-              style={{ animationDelay: `${0.05 + i * 0.06}s` }}
-            >
-              <div className={styles.timelineTrack}>
-                <div className={styles.dot} />
-                {i < recent.length - 1 && <div className={styles.line} />}
-              </div>
-              <div className={mergeClasses(styles.itemBody, i === recent.length - 1 ? styles.itemBodyLast : undefined)}>
-                <div>
-                  <div className={styles.name}>{p.name}</div>
-                  <div className={styles.qty}>qty {p.quantity}</div>
-                </div>
-                <div className={styles.time}>
-                  {new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <Timeline items={items} />
       )}
     </Card>
   );

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { makeStyles, tokens, Button, Spinner, MessageBar, MessageBarBody, MessageBarActions, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, DialogTrigger, Input, Field } from '@fluentui/react-components';
+import { Button, Spin, Alert, Modal, Form, Input } from 'antd';
 import { Add20Regular } from '@fluentui/react-icons';
 import { CategoriesGrid } from '../../../components/categories/CategoriesGrid';
 import { EmptyState } from '../../../components/shared/EmptyState';
@@ -8,21 +8,7 @@ import { RoleGuard } from '../../../components/shared/RoleGuard';
 import { useCategories, createCategory, updateCategory, deleteCategory, type Category } from '../../../hooks/useCategories';
 import { mutate } from 'swr';
 
-const useStyles = makeStyles({
-  page: {
-    padding: '28px 32px',
-    backgroundColor: tokens.colorNeutralBackground2,
-    minHeight: '100%',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    marginBottom: '20px',
-  },
-});
-
 export default function CategoriesPage() {
-  const styles = useStyles();
   const { data: categories, isLoading, error } = useCategories();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Category | undefined>();
@@ -54,44 +40,55 @@ export default function CategoriesPage() {
     }
   };
 
-  if (isLoading) return <Spinner label="Loading categories..." />;
-  if (error) return <MessageBar intent="error"><MessageBarBody>Failed to load categories</MessageBarBody></MessageBar>;
+  if (isLoading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%', padding: '28px 32px' }}>
+      <Spin />
+    </div>
+  );
+  if (error) return <Alert type="error" message="Failed to load categories" showIcon />;
 
   return (
-    <>
-      <div className={styles.page}>
-        <div className={styles.header}>
-          <RoleGuard minRole="MANAGER">
-            <Button appearance="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setName(''); setDialogOpen(true); }}>
-              Add Category
-            </Button>
-          </RoleGuard>
-        </div>
-        {opError && <MessageBar intent="error"><MessageBarBody>{opError}</MessageBarBody><MessageBarActions containerAction={<Button appearance="transparent" onClick={() => setOpError('')}>✕</Button>} /></MessageBar>}
-        {(categories ?? []).length === 0 ? (
-          <EmptyState title="No categories yet" description="Organise your products by adding categories." action={{ label: 'Add Category', onClick: () => setDialogOpen(true) }} />
-        ) : (
-          <CategoriesGrid
-            categories={categories ?? []}
-            onEdit={(cat) => { setEditing(cat); setName(cat.name); setDialogOpen(true); }}
-            onDelete={handleDelete}
-          />
-        )}
+    <div style={{ padding: '28px 32px', background: '#f5f5f5', minHeight: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
+        <RoleGuard minRole="MANAGER">
+          <Button type="primary" icon={<Add20Regular />} onClick={() => { setEditing(undefined); setName(''); setDialogOpen(true); }}>
+            Add Category
+          </Button>
+        </RoleGuard>
       </div>
-      <Dialog open={dialogOpen} onOpenChange={(_, d) => setDialogOpen(d.open)}>
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>{editing ? 'Edit Category' : 'Add Category'}</DialogTitle>
-            <DialogContent>
-              <Field label="Name"><Input value={name} onChange={(_, d) => setName(d.value)} /></Field>
-            </DialogContent>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement><Button appearance="secondary">Cancel</Button></DialogTrigger>
-              <Button appearance="primary" onClick={handleSave}>Save</Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
-    </>
+      {opError && (
+        <Alert
+          type="error"
+          message={opError}
+          showIcon
+          closable
+          onClose={() => setOpError('')}
+          style={{ marginBottom: 16 }}
+        />
+      )}
+      {(categories ?? []).length === 0 ? (
+        <EmptyState title="No categories yet" description="Organise your products by adding categories." action={{ label: 'Add Category', onClick: () => setDialogOpen(true) }} />
+      ) : (
+        <CategoriesGrid
+          categories={categories ?? []}
+          onEdit={(cat) => { setEditing(cat); setName(cat.name); setDialogOpen(true); }}
+          onDelete={handleDelete}
+        />
+      )}
+      <Modal
+        open={dialogOpen}
+        title={editing ? 'Edit Category' : 'Add Category'}
+        onOk={handleSave}
+        onCancel={() => { setDialogOpen(false); setEditing(undefined); setName(''); }}
+        okText="Save"
+      >
+        <Form layout="vertical">
+          <Form.Item label="Name">
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Category name" />
+          </Form.Item>
+        </Form>
+        {opError && <Alert type="error" message={opError} showIcon style={{ marginTop: 8 }} />}
+      </Modal>
+    </div>
   );
 }

@@ -1,46 +1,31 @@
-import {
-  Dialog,
-  DialogTrigger,
-  DialogSurface,
-  DialogTitle,
-  DialogBody,
-  DialogActions,
-  DialogContent,
-  Button,
-} from '@fluentui/react-components';
+'use client';
+import { useState } from 'react';
+import React from 'react';
+import { Modal } from 'antd';
 
 interface ConfirmDialogProps {
-  trigger: React.ReactElement;
+  trigger: React.ReactElement<{ onClick?: () => void }>;
   title: string;
   description: string;
   confirmLabel?: string;
   onConfirm: () => void;
 }
 
-export function ConfirmDialog({
-  trigger,
-  title,
-  description,
-  confirmLabel = 'Confirm',
-  onConfirm,
-}: ConfirmDialogProps) {
+export function ConfirmDialog({ trigger, title, description, confirmLabel = 'Confirm', onConfirm }: ConfirmDialogProps) {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
-      <DialogTrigger disableButtonEnhancement>{trigger}</DialogTrigger>
-      <DialogSurface>
-        <DialogBody>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogContent>{description}</DialogContent>
-          <DialogActions>
-            <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">Cancel</Button>
-            </DialogTrigger>
-            <DialogTrigger disableButtonEnhancement>
-              <Button appearance="primary" onClick={onConfirm}>{confirmLabel}</Button>
-            </DialogTrigger>
-          </DialogActions>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
+    <>
+      {React.cloneElement(trigger, { onClick: () => setOpen(true) })}
+      <Modal
+        open={open}
+        title={title}
+        okText={confirmLabel}
+        okType="danger"
+        onOk={() => { onConfirm(); setOpen(false); }}
+        onCancel={() => setOpen(false)}
+      >
+        <p>{description}</p>
+      </Modal>
+    </>
   );
 }

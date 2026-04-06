@@ -1,15 +1,4 @@
-import { Text, Button, makeStyles, tokens } from '@fluentui/react-components';
-
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: tokens.spacingVerticalM,
-    padding: `${tokens.spacingVerticalXXXL} ${tokens.spacingHorizontalXXL}`,
-  },
-});
+import { Empty, Button } from 'antd';
 
 interface EmptyStateProps {
   title: string;
@@ -18,14 +7,16 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ title, description, action }: EmptyStateProps) {
-  const styles = useStyles();
   return (
-    <div className={styles.container}>
-      <Text size={500} weight="semibold">{title}</Text>
-      {description && <Text size={300} style={{ color: tokens.colorNeutralForeground2 }}>{description}</Text>}
-      {action && (
-        <Button appearance="primary" onClick={action.onClick}>{action.label}</Button>
-      )}
-    </div>
+    <Empty
+      description={
+        <span>
+          <strong>{title}</strong>
+          {description && <><br /><span style={{ fontSize: 13, color: '#8c8c8c' }}>{description}</span></>}
+        </span>
+      }
+    >
+      {action && <Button type="primary" onClick={action.onClick}>{action.label}</Button>}
+    </Empty>
   );
 }

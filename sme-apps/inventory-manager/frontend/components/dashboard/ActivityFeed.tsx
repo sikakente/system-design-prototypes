@@ -13,7 +13,7 @@ export function ActivityFeed({ products }: ActivityFeedProps) {
     .slice(0, 6);
 
   const items = recent.map((p) => ({
-    children: (
+    content: (
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <Text strong style={{ fontSize: 13, display: 'block' }}>{p.name}</Text>

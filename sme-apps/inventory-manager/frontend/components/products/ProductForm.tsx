@@ -53,7 +53,7 @@ export function ProductForm({ open, product, categories, onSubmit, onClose }: Pr
     <Drawer
       open={open}
       placement="right"
-      width={480}
+      size="large"
       title={product ? 'Edit Product' : 'Add Product'}
       onClose={onClose}
       footer={

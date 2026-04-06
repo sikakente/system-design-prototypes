@@ -10,9 +10,8 @@ const useStyles = makeStyles({
   },
   main: {
     flex: '1',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'auto',
+    overflowY: 'auto',
+    backgroundColor: tokens.colorNeutralBackground2,
   },
 });
 

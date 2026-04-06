@@ -1,4 +1,4 @@
-import { makeStyles, tokens, Body1, Title3, Button } from '@fluentui/react-components';
+import { Text, Button, makeStyles, tokens } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   container: {
@@ -7,8 +7,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
     gap: tokens.spacingVerticalM,
-    padding: tokens.spacingVerticalXXL,
-    color: tokens.colorNeutralForeground3,
+    padding: `${tokens.spacingVerticalXXXL} ${tokens.spacingHorizontalXXL}`,
   },
 });
 
@@ -22,9 +21,11 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
   const styles = useStyles();
   return (
     <div className={styles.container}>
-      <Title3>{title}</Title3>
-      {description && <Body1>{description}</Body1>}
-      {action && <Button appearance="primary" onClick={action.onClick}>{action.label}</Button>}
+      <Text size={500} weight="semibold">{title}</Text>
+      {description && <Text size={300} style={{ color: tokens.colorNeutralForeground2 }}>{description}</Text>}
+      {action && (
+        <Button appearance="primary" onClick={action.onClick}>{action.label}</Button>
+      )}
     </div>
   );
 }

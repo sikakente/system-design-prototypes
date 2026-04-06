@@ -1,6 +1,6 @@
 'use client';
-import { makeStyles, tokens, Spinner } from '@fluentui/react-components';
-import { Header } from '../../../components/shell/Header';
+import { makeStyles, tokens } from '@fluentui/react-components';
+import { Box20Regular, Alert20Regular, Tag20Regular, People20Regular } from '@fluentui/react-icons';
 import { StatCard } from '../../../components/dashboard/StatCard';
 import { ActivityFeed } from '../../../components/dashboard/ActivityFeed';
 import { LowStockPanel } from '../../../components/dashboard/LowStockPanel';
@@ -10,9 +10,26 @@ import { useAlerts } from '../../../hooks/useAlerts';
 import { useTeam } from '../../../hooks/useTeam';
 
 const useStyles = makeStyles({
-  content: { padding: tokens.spacingVerticalL, display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalL },
-  stats: { display: 'flex', gap: tokens.spacingHorizontalM, flexWrap: 'wrap' },
-  bottom: { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: tokens.spacingHorizontalM },
+  page: {
+    minHeight: '100%',
+    backgroundColor: tokens.colorNeutralBackground2,
+  },
+  content: {
+    padding: '28px 32px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalXXL,
+  },
+  stats: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: tokens.spacingVerticalXL,
+  },
+  bottom: {
+    display: 'grid',
+    gridTemplateColumns: '2fr 1fr',
+    gap: tokens.spacingVerticalXL,
+  },
 });
 
 export default function DashboardPage() {
@@ -22,23 +39,42 @@ export default function DashboardPage() {
   const { data: alerts } = useAlerts();
   const { data: team } = useTeam();
 
-  if (pLoading) return <Spinner label="Loading..." />;
-
   return (
-    <>
-      <Header title="Dashboard" />
+    <div className={styles.page}>
       <div className={styles.content}>
         <div className={styles.stats}>
-          <StatCard label="Total Items" value={products?.length ?? 0} />
-          <StatCard label="Low Stock" value={alerts?.length ?? 0} accent={alerts?.length ? 'danger' : 'default'} />
-          <StatCard label="Categories" value={categories?.length ?? 0} />
-          <StatCard label="Team Members" value={team?.length ?? 0} />
+          <StatCard
+            label="Total Items"
+            value={pLoading ? '—' : (products?.length ?? 0)}
+            icon={<Box20Regular />}
+            featured={true}
+            animationDelay="0s"
+          />
+          <StatCard
+            label="Low Stock"
+            value={alerts?.length ?? '—'}
+            icon={<Alert20Regular />}
+            accent={(alerts?.length ?? 0) > 0 ? 'danger' : 'default'}
+            animationDelay="0.07s"
+          />
+          <StatCard
+            label="Categories"
+            value={categories?.length ?? '—'}
+            icon={<Tag20Regular />}
+            animationDelay="0.14s"
+          />
+          <StatCard
+            label="Team Members"
+            value={team?.length ?? '—'}
+            icon={<People20Regular />}
+            animationDelay="0.21s"
+          />
         </div>
         <div className={styles.bottom}>
           <ActivityFeed products={products ?? []} />
           <LowStockPanel alerts={alerts ?? []} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
